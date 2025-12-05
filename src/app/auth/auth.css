@@ -1,0 +1,343 @@
+.auth-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: 'Courier New', monospace;
+}
+
+.auth-card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 450px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.auth-header h1 {
+  color: #2c3e50;
+  font-size: 2.5em;
+  margin: 0 0 20px 0;
+}
+
+.pokeball-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  position: relative;
+  animation: rotatePokeball 4s linear infinite;
+}
+
+@keyframes rotatePokeball {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.pokeball-top {
+  width: 80px;
+  height: 40px;
+  background: #f44336;
+  border-radius: 80px 80px 0 0;
+  position: relative;
+  border: 3px solid #222;
+  border-bottom: 0;
+}
+
+.pokeball-middle {
+  width: 80px;
+  height: 6px;
+  background: #222;
+  position: relative;
+  z-index: 2;
+}
+
+.pokeball-middle::after {
+  content: '';
+  width: 22px;
+  height: 22px;
+  background: white;
+  border: 3px solid #222;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.pokeball-bottom {
+  width: 80px;
+  height: 40px;
+  background: white;
+  border-radius: 0 0 80px 80px;
+  position: relative;
+  border: 3px solid #222;
+  border-top: 0;
+}
+
+.auth-form {
+  margin-bottom: 20px;
+}
+
+.auth-form h2 {
+  color: #2c3e50;
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  color: #2c3e50;
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 0.95em;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 3px solid #bdc3c7;
+  border-radius: 10px;
+  font-size: 1em;
+  font-family: 'Courier New', monospace;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.form-group input:disabled {
+  background: #ecf0f1;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background: #ffebee;
+  color: #c62828;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border: 2px solid #ef5350;
+  font-weight: bold;
+  text-align: center;
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.btn-primary {
+  width: 100%;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-footer {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.auth-footer p {
+  color: #7f8c8d;
+  margin-bottom: 8px;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: #3498db;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1em;
+  text-decoration: underline;
+  font-family: 'Courier New', monospace;
+}
+
+.btn-link:hover {
+  color: #2980b9;
+}
+
+.guest-section {
+  margin-top: 30px;
+}
+
+.divider {
+  text-align: center;
+  margin: 20px 0;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 2px;
+  background: #bdc3c7;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.divider span {
+  background: white;
+  padding: 0 15px;
+  color: #7f8c8d;
+  font-weight: bold;
+  position: relative;
+}
+
+.btn-guest {
+  width: 100%;
+  background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 4px 10px rgba(127, 140, 141, 0.3);
+}
+
+.btn-guest:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(127, 140, 141, 0.4);
+  background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%);
+}
+
+.guest-note {
+  text-align: center;
+  color: #95a5a6;
+  font-size: 0.85em;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+.connection-status {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.connection-status.success {
+  background: #d4edda;
+  color: #155724;
+  border: 2px solid #c3e6cb;
+}
+
+.connection-status.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 2px solid #f5c6cb;
+}
+
+.connection-status p {
+  margin: 0;
+}
+
+.btn-test {
+  width: 100%;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Courier New', monospace;
+  margin-bottom: 15px;
+}
+
+.btn-test:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(52, 152, 219, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .auth-card {
+    padding: 30px 20px;
+  }
+
+  .auth-header h1 {
+    font-size: 2em;
+  }
+
+  .pokeball-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .pokeball-top,
+  .pokeball-bottom,
+  .pokeball-middle {
+    width: 60px;
+  }
+
+  .pokeball-top,
+  .pokeball-bottom {
+    height: 30px;
+  }
+}

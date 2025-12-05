@@ -1,0 +1,189 @@
+<div class="battle-container">
+  <!-- Botón Volver -->
+  <button class="btn-back" (click)="goToHome()">
+    ← Volver al Menú
+  </button>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading">
+    <div class="pokeball-loader"></div>
+    <p>Cargando batalla...</p>
+  </div>
+
+  <!-- Start Screen -->
+  <div *ngIf="(battleState$ | async) as state">
+    <div *ngIf="state.battleStatus === 'not-started' && !isLoading" class="start-screen">
+      <h1>Batalla Pokémon</h1>
+      <button class="btn-start" (click)="startBattle()">Iniciar Batalla</button>
+    </div>
+
+    <!-- Battle Arena - Estilo Nintendo DS -->
+    <div *ngIf="state.battleStatus === 'ongoing'" class="ds-battle-screen">
+      
+      <!-- Pantalla Superior: Campo de Batalla -->
+      <div class="ds-top-screen">
+        <div class="battlefield">
+          <!-- Área del CPU (arriba) -->
+          <div class="pokemon-platform cpu-platform">
+            <div class="pokemon-info-box cpu-info">
+              <div class="info-header">
+                <span class="pokemon-name">{{ state.cpuTeam[state.cpuActivePokemon].name | titlecase }}</span>
+                <span class="pokemon-level">Lv50</span>
+              </div>
+              <div class="hp-container">
+                <div class="hp-bar-outer">
+                  <div class="hp-bar-inner" 
+                       [style.width.%]="getHPPercentage(state.cpuTeam[state.cpuActivePokemon])"
+                       [style.background-color]="getHPColor(getHPPercentage(state.cpuTeam[state.cpuActivePokemon]))">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pokemon-sprite-container">
+              <img [src]="state.cpuTeam[state.cpuActivePokemon].sprite" 
+                   [alt]="state.cpuTeam[state.cpuActivePokemon].name"
+                   class="pokemon-sprite-battle cpu-sprite-battle">
+            </div>
+          </div>
+
+          <!-- Área del Jugador (abajo) -->
+          <div class="pokemon-platform player-platform">
+            <div class="pokemon-sprite-container">
+              <img [src]="state.playerTeam[state.playerActivePokemon].sprite" 
+                   [alt]="state.playerTeam[state.playerActivePokemon].name"
+                   class="pokemon-sprite-battle player-sprite-battle">
+            </div>
+            <div class="pokemon-info-box player-info">
+              <div class="info-header">
+                <span class="pokemon-name">{{ state.playerTeam[state.playerActivePokemon].name | titlecase }}</span>
+                <span class="pokemon-level">Lv50</span>
+              </div>
+              <div class="hp-container">
+                <div class="hp-label">
+                  <span>HP:</span>
+                  <span class="hp-numbers">{{ state.playerTeam[state.playerActivePokemon].currentHP }}/{{ state.playerTeam[state.playerActivePokemon].maxHP }}</span>
+                </div>
+                <div class="hp-bar-outer">
+                  <div class="hp-bar-inner" 
+                       [style.width.%]="getHPPercentage(state.playerTeam[state.playerActivePokemon])"
+                       [style.background-color]="getHPColor(getHPPercentage(state.playerTeam[state.playerActivePokemon]))">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team Preview en las esquinas -->
+        <div class="team-indicators">
+          <div class="team-side cpu-team-side">
+            <div *ngFor="let pokemon of state.cpuTeam" 
+                 class="team-ball"
+                 [class.fainted]="pokemon.currentHP <= 0"
+                 [class.active]="pokemon === state.cpuTeam[state.cpuActivePokemon]">
+            </div>
+          </div>
+          <div class="team-side player-team-side">
+            <div *ngFor="let pokemon of state.playerTeam" 
+                 class="team-ball"
+                 [class.fainted]="pokemon.currentHP <= 0"
+                 [class.active]="pokemon === state.playerTeam[state.playerActivePokemon]">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pantalla Inferior: Diálogo y Controles -->
+      <div class="ds-bottom-screen">
+        
+        <!-- Battle Log / Dialog Box -->
+        <div class="dialog-box">
+          <div class="dialog-content">
+            <p class="dialog-text">{{ state.battleLog[state.battleLog.length - 1] }}</p>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="battle-menu" *ngIf="state.isPlayerTurn">
+          <!-- Moves Grid -->
+          <div class="moves-menu">
+            <button *ngFor="let move of state.playerTeam[state.playerActivePokemon].moves; let i = index"
+                    class="move-btn"
+                    [class.disabled]="move.currentPP <= 0"
+                    [disabled]="move.currentPP <= 0"
+                    (click)="useMove(i)">
+              <div class="move-info">
+                <span class="move-name-text">{{ move.name | titlecase }}</span>
+                <span class="move-pp">PP {{ move.currentPP }}/{{ move.pp }}</span>
+              </div>
+              <span class="move-type-badge" [class]="'type-' + move.type">{{ move.type | uppercase }}</span>
+            </button>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button class="action-btn" (click)="toggleTeamSelection()">
+              <span class="btn-icon">🔄</span>
+              <span>CAMBIAR</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Waiting Indicator -->
+        <div class="battle-menu waiting-menu" *ngIf="!state.isPlayerTurn">
+          <div class="waiting-message">
+            <p>Esperando al rival...</p>
+            <div class="waiting-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Selection Modal -->
+      <div class="team-modal" *ngIf="showTeamSelection" (click)="toggleTeamSelection()">
+        <div class="team-modal-content ds-style" (click)="$event.stopPropagation()">
+          <h3>Elige tu Pokémon</h3>
+          <div class="team-grid">
+            <div *ngFor="let pokemon of state.playerTeam; let i = index"
+                 class="team-pokemon-card"
+                 [class.disabled]="pokemon.currentHP <= 0 || i === state.playerActivePokemon"
+                 (click)="pokemon.currentHP > 0 && i !== state.playerActivePokemon ? switchPokemon(i) : null">
+              <img [src]="pokemon.sprite" [alt]="pokemon.name">
+              <div class="card-info">
+                <h4>{{ pokemon.name | titlecase }}</h4>
+                <div class="card-hp">
+                  <div class="card-hp-bar">
+                    <div class="card-hp-fill" 
+                         [style.width.%]="getHPPercentage(pokemon)"
+                         [style.background-color]="getHPColor(getHPPercentage(pokemon))">
+                    </div>
+                  </div>
+                  <span class="card-hp-text">{{ pokemon.currentHP }}/{{ pokemon.maxHP }}</span>
+                </div>
+              </div>
+              <span *ngIf="pokemon.currentHP <= 0" class="status-badge fainted">Debilitado</span>
+              <span *ngIf="i === state.playerActivePokemon" class="status-badge active">Activo</span>
+            </div>
+          </div>
+          <button class="close-btn" (click)="toggleTeamSelection()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- End Screen -->
+    <div *ngIf="state.battleStatus === 'player-won' || state.battleStatus === 'cpu-won'" 
+         class="end-screen">
+      <h2 *ngIf="state.battleStatus === 'player-won'" class="win">¡Victoria!</h2>
+      <h2 *ngIf="state.battleStatus === 'cpu-won'" class="lose">Derrota</h2>
+      
+      <div class="final-log">
+        <p *ngFor="let log of state.battleLog.slice(-8)">{{ log }}</p>
+      </div>
+
+      <button class="btn-restart" (click)="newBattle()">Nueva Batalla</button>
+    </div>
+  </div>
+</div>

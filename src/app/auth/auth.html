@@ -1,0 +1,134 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Pokémon Battle</h1>
+      <div class="pokeball-icon">
+        <div class="pokeball-top"></div>
+        <div class="pokeball-middle"></div>
+        <div class="pokeball-bottom"></div>
+      </div>
+    </div>
+
+    <!-- Login Form -->
+    <div *ngIf="isLoginMode" class="auth-form">
+      <h2>Iniciar Sesión</h2>
+      
+      <div class="form-group">
+        <label>Email</label>
+        <input 
+          type="email" 
+          [(ngModel)]="loginEmail"
+          placeholder="tu@email.com"
+          [disabled]="isLoading">
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input 
+          type="password" 
+          [(ngModel)]="loginPassword"
+          placeholder="••••••••"
+          [disabled]="isLoading"
+          (keyup.enter)="login()">
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <button 
+        class="btn-primary" 
+        (click)="login()"
+        [disabled]="isLoading">
+        <span *ngIf="!isLoading">Entrar</span>
+        <span *ngIf="isLoading">Cargando...</span>
+      </button>
+
+      <div class="auth-footer">
+        <p>¿No tienes cuenta?</p>
+        <button class="btn-link" (click)="toggleMode()">Regístrate aquí</button>
+      </div>
+    </div>
+
+    <!-- Register Form -->
+    <div *ngIf="!isLoginMode" class="auth-form">
+      <h2>Registrarse</h2>
+      
+      <div class="form-group">
+        <label>Nombre de Usuario</label>
+        <input 
+          type="text" 
+          [(ngModel)]="registerUsername"
+          placeholder="Entrenador123"
+          [disabled]="isLoading">
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input 
+          type="email" 
+          [(ngModel)]="registerEmail"
+          placeholder="tu@email.com"
+          [disabled]="isLoading">
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input 
+          type="password" 
+          [(ngModel)]="registerPassword"
+          placeholder="••••••••"
+          [disabled]="isLoading">
+      </div>
+
+      <div class="form-group">
+        <label>Confirmar Contraseña</label>
+        <input 
+          type="password" 
+          [(ngModel)]="registerConfirmPassword"
+          placeholder="••••••••"
+          [disabled]="isLoading"
+          (keyup.enter)="register()">
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <button 
+        class="btn-primary" 
+        (click)="register()"
+        [disabled]="isLoading">
+        <span *ngIf="!isLoading">Crear Cuenta</span>
+        <span *ngIf="isLoading">Creando...</span>
+      </button>
+
+      <div class="auth-footer">
+        <p>¿Ya tienes cuenta?</p>
+        <button class="btn-link" (click)="toggleMode()">Inicia sesión aquí</button>
+      </div>
+    </div>
+
+    <!-- Guest Button -->
+    <div class="guest-section">
+      <!-- Connection Status -->
+      <div *ngIf="connectionStatus" class="connection-status" 
+           [class.success]="connectionStatus.includes('exitosa')"
+           [class.error]="connectionStatus.includes('Error')">
+        <p>{{ connectionStatus }}</p>
+      </div>
+
+      <button class="btn-test" (click)="testConnection()">
+        🔍 Probar Conexión
+      </button>
+
+      <div class="divider">
+        <span>o</span>
+      </div>
+      <button class="btn-guest" (click)="continueAsGuest()">
+        Continuar como Invitado
+      </button>
+      <p class="guest-note">*Como invitado no se guardará tu progreso</p>
+    </div>
+  </div>
+</div>

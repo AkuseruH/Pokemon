@@ -1,0 +1,62 @@
+<div class="menu-container">
+  <div class="menu-content">
+    <!-- Perfil del Usuario -->
+    <div *ngIf="(profile$ | async) as profile" class="user-profile">
+      <div class="profile-header">
+        <div class="profile-icon">👤</div>
+        <div class="profile-info">
+          <h3>{{ profile.username }}</h3>
+          <p class="level">Nivel {{ profile.level }}</p>
+        </div>
+      </div>
+      <div class="exp-container">
+        <div class="exp-bar">
+          <div class="exp-fill" [style.width.%]="getExpPercentage(profile)"></div>
+        </div>
+        <p class="exp-text">{{ getExpToNextLevel(profile) }} EXP para nivel {{ profile.level + 1 }}</p>
+      </div>
+      <div class="stats">
+        <div class="stat-item">
+          <span class="stat-icon">🏆</span>
+          <span class="stat-value">{{ profile.battles_won }}</span>
+          <span class="stat-label">Victorias</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-icon">⭐</span>
+          <span class="stat-value">{{ profile.experience }}</span>
+          <span class="stat-label">EXP Total</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modo Invitado -->
+    <div *ngIf="isGuest$ | async" class="guest-banner">
+      <p>🎮 Modo Invitado</p>
+      <span>Tu progreso no se guardará</span>
+    </div>
+
+    <h1 class="title">Pokémon Battle</h1>
+    
+    <div class="pokeball-logo">
+      <div class="pokeball">
+        <div class="pokeball-top"></div>
+        <div class="pokeball-middle"></div>
+        <div class="pokeball-bottom"></div>
+      </div>
+    </div>
+
+    <div class="menu-buttons">
+      <button class="menu-btn" (click)="goToBattle()">
+        <span class="btn-icon">⚔️</span>
+        <span class="btn-text">Iniciar Batalla</span>
+      </button>
+      
+      <button class="menu-btn secondary" (click)="logout()">
+        <span class="btn-icon">🚪</span>
+        <span class="btn-text">Cerrar Sesión</span>
+      </button>
+    </div>
+
+    <p class="version">Versión 1.0.0</p>
+  </div>
+</div>
